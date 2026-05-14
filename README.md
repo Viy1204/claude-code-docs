@@ -1,6 +1,6 @@
 # Claude Code 知识库
 
-> 20 篇官方博客文章 + 50 页技术文档，整合为一个自包含的可阅读 SPA。
+> 35 篇官方博客文章 + 50 页技术文档，整合为一个自包含的可阅读 SPA。
 
 **在线阅读 →** https://viy1204.github.io/claude-code-docs/
 
@@ -10,16 +10,20 @@
 
 ### 博客文章（中文译版）
 
-抓取自 [claude.com/blog](https://claude.com/blog)，涵盖 6 个主题：
+抓取自 [claude.com/blog](https://claude.com/blog)，涵盖 6 个主题，共 35 篇：
 
 | 分类 | 代表文章 |
 |---|---|
 | Multi-Agent | 多智能体协调模式：五种方法及适用场景 |
+| Multi-Agent | Claude Managed Agents：生产部署速度提升 10 倍 |
 | 产品功能 | Claude Code 推出 Routines 例行任务功能 |
+| 产品功能 | Agent View in Claude Code |
 | 开发者 | 在 Claude Code 中使用 Claude Opus 4.7 的最佳实践 |
-| 客户案例 | Carta Healthcare 如何让 AI 像临床摘要员一样推理 |
+| 开发者 | 构建 Claude Code 的经验：Prompt Caching 是关键 |
+| 客户案例 | Claude 在法律行业的应用 |
+| 客户案例 | Kepler 用 Claude 构建金融服务可验证 AI |
 | 指南 | 指南：为金融服务构建 AI 智能体 |
-| 安全 | 为 AI 加速的攻击做好安全准备 |
+| 安全 | Claude Security 功能公测发布 |
 
 ### 官方文档（英文原版）
 
@@ -51,13 +55,26 @@ https://viy1204.github.io/claude-code-docs/
 
 ---
 
-## 本地构建
+## 本地构建与内容更新
 
-如需更新内容，本地运行生成脚本（需要 Python 3 + `markdown` 库）：
+需要 Python 3 + `markdown` 库：
 
 ```bash
 pip install markdown
 cd scripts/claude-code-docs
+```
+
+**首次或同步最新文章：**
+
+```bash
+python fetch-new-blogs.py   # 抓取 claude.com/blog 上的新文章
+python translate-blogs.py   # 用 Claude Haiku 自动翻译为中文
+python generate.py          # 重新生成 SPA
+```
+
+**仅重新生成（内容无更新时）：**
+
+```bash
 python generate.py
 ```
 
