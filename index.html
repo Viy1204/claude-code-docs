@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Claude Code 知识库</title>
+<script>
+// Apply saved theme before first paint to prevent flash
+(function(){
+  var t=localStorage.getItem('theme');
+  if(t) document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -30,13 +37,45 @@
   --toc-w: 224px;
   --reader-max: 700px;
   --topbar-h: 56px;
+  --topbar-bg: rgba(247,245,240,0.96);
+  --code-bg: #F5F1EA;
+  --code-text: #3D2A1A;
+  --inline-code-bg: #F0EDE6;
+  --inline-code-text: #7A3A1A;
+  --logo-stroke: #C85C20;
+}
+[data-theme="dark"] {
+  --bg: #06080C;
+  --surface: #0B0E14;
+  --surface2: #111620;
+  --surface3: #181E2A;
+  --border: #1C2333;
+  --border2: #252E40;
+  --text: #C8D4E8;
+  --text-muted: #5A6880;
+  --text-faint: #2E3A4C;
+  --accent: #F09040;
+  --accent-dim: rgba(240,144,64,0.08);
+  --accent-glow: rgba(240,144,64,0.04);
+  --c-multi: #A78BFA;
+  --c-product: #60A5FA;
+  --c-dev: #34D399;
+  --c-guide: #FBBF24;
+  --c-case: #22D3EE;
+  --c-security: #F87171;
+  --topbar-bg: rgba(6,8,12,0.92);
+  --code-bg: #0A0E14;
+  --code-text: #B8C8D8;
+  --inline-code-bg: var(--surface2);
+  --inline-code-text: #A9C8E8;
+  --logo-stroke: #F09040;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans','PingFang SC',sans-serif;font-size:14px;line-height:1.7;min-height:100vh;-webkit-font-smoothing:antialiased;}
 
 /* ── Topbar ── */
-.topbar{position:sticky;top:0;z-index:200;background:rgba(247,245,240,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:20px;padding:0 28px;height:var(--topbar-h);}
+.topbar{position:sticky;top:0;z-index:200;background:var(--topbar-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:20px;padding:0 28px;height:var(--topbar-h);}
 .logo{display:flex;align-items:center;gap:11px;flex-shrink:0;}
 .logo-mark{width:26px;height:26px;display:flex;align-items:center;justify-content:center;}
 .logo-mark svg{width:26px;height:26px;}
@@ -161,12 +200,12 @@ main{padding:32px 40px 64px;min-width:0;}
 .article-content blockquote strong{color:var(--text);}
 .article-content hr{border:none;border-top:1px solid var(--border);margin:36px 0;}
 .article-content img{max-width:100%;border-radius:6px;display:block;margin:24px auto;box-shadow:0 2px 16px rgba(0,0,0,.1);}
-.article-content code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#F0EDE6;border:1px solid var(--border);padding:1px 6px;border-radius:3px;color:#7A3A1A;}
-.article-content pre{background:#F5F1EA;border:1px solid var(--border);border-radius:6px;padding:20px 22px;overflow-x:auto;margin:20px 0;position:relative;}
+.article-content code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:var(--inline-code-bg);border:1px solid var(--border);padding:1px 6px;border-radius:3px;color:var(--inline-code-text);}
+.article-content pre{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:20px 22px;overflow-x:auto;margin:20px 0;position:relative;}
 .article-content pre::before{content:'';display:block;width:6px;height:6px;border-radius:50%;background:rgba(200,92,32,.5);position:absolute;top:10px;right:14px;}
 .article-content pre::-webkit-scrollbar{height:3px;}
 .article-content pre::-webkit-scrollbar-thumb{background:var(--border2);}
-.article-content pre code{background:none;border:none;padding:0;font-size:13px;line-height:1.7;color:#3D2A1A;}
+.article-content pre code{background:none;border:none;padding:0;font-size:13px;line-height:1.7;color:var(--code-text);}
 .article-content table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13.5px;}
 .article-content th{background:var(--surface2);border:1px solid var(--border2);padding:10px 14px;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:12px;color:var(--text);letter-spacing:.1px;}
 .article-content td{border:1px solid var(--border);padding:9px 14px;color:var(--text-muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;line-height:1.5;}
@@ -192,6 +231,15 @@ main{padding:32px 40px 64px;min-width:0;}
 .card:nth-child(6){animation-delay:.25s}
 .card:nth-child(n+7){animation-delay:.28s}
 
+/* ── Theme toggle ── */
+.theme-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--text-muted);transition:background .15s,color .15s,border-color .15s;flex-shrink:0;}
+.theme-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--border2);}
+.theme-btn .icon-sun,.theme-btn .icon-moon{width:15px;height:15px;pointer-events:none;}
+[data-theme="dark"] .icon-sun{display:block;}
+[data-theme="dark"] .icon-moon{display:none;}
+[data-theme="light"] .icon-sun{display:none;}
+[data-theme="light"] .icon-moon{display:block;}
+
 /* ── No results ── */
 .no-results{color:var(--text-faint);font-family:'JetBrains Mono',monospace;font-size:12px;padding:24px 0;display:none;}
 .no-results.visible{display:block;}
@@ -208,7 +256,7 @@ main{padding:32px 40px 64px;min-width:0;}
 <header class="topbar">
   <div class="logo">
     <div class="logo-mark">
-      <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" rx="5" stroke="#C85C20" stroke-width="1.2"/><path d="M8 18V8h4a4 4 0 0 1 0 8H8" stroke="#C85C20" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 13h4" stroke="#C85C20" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" rx="5" stroke="var(--logo-stroke)" stroke-width="1.2"/><path d="M8 18V8h4a4 4 0 0 1 0 8H8" stroke="var(--logo-stroke)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 13h4" stroke="var(--logo-stroke)" stroke-width="1.2" stroke-linecap="round"/></svg>
     </div>
     <span class="logo-text">Claude Code</span>
     <span class="logo-sep">/</span>
@@ -234,6 +282,18 @@ main{padding:32px 40px 64px;min-width:0;}
     <div id="reader-title" class="reader-title"></div>
     <div id="reader-meta" class="reader-meta"></div>
   </div>
+
+  <button class="theme-btn" onclick="toggleTheme()" title="切换深色/浅色">
+    <!-- Sun icon (shown in dark mode → click to go light) -->
+    <svg class="icon-sun" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <circle cx="7.5" cy="7.5" r="2.8"/>
+      <path d="M7.5 1v1.5M7.5 12.5V14M1 7.5h1.5M12.5 7.5H14M3 3l1 1M11 11l1 1M11 3l-1 1M3 11l1-1"/>
+    </svg>
+    <!-- Moon icon (shown in light mode → click to go dark) -->
+    <svg class="icon-moon" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 10a5 5 0 0 1-5.5-5.5A5 5 0 1 0 12 10z"/>
+    </svg>
+  </button>
 </header>
 
 <div class="layout">
@@ -452,7 +512,25 @@ const LIST_BAR = document.querySelector('.list-bar');
 let currentId = null;
 let articleIndex = [];
 
+// ── Theme toggle ───────────────────────────────────────────────────────────────
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  applyTheme(current === 'light' ? 'dark' : 'light');
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────────
+
 function init() {
+  // Restore saved theme (default: light)
+  const saved = localStorage.getItem('theme') || 'light';
+  applyTheme(saved);
+
   articleIndex = ARTICLES.map(a => a.id);
   renderNavCounts();
   // handle hash on load
